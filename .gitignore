@@ -1,0 +1,8 @@
+classes/
+build/
+.idea/
+.gradle/
+LDSnakeCore/build/
+LDSnakeDesktop/build/
+LDSnakeHtml5/build/
+LDSnakeHtml5/war/
