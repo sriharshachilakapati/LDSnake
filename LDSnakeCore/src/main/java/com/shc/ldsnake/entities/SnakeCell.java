@@ -140,7 +140,7 @@ public class SnakeCell extends Entity2D
 
         final float sign = Math.abs(clampedCurrent - clampedTarget) < 180 ? 1 : -1;
 
-        final float speed = 5;
+        final float speed = Math.min(5, Math.abs(clampedTarget - clampedCurrent));
 
         if (clampedCurrent < clampedTarget)
             rotation += speed * sign;
