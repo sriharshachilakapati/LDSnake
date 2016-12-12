@@ -2,6 +2,7 @@ package com.shc.ldsnake.states;
 
 import com.shc.ldsnake.LDSnake;
 import com.shc.ldsnake.Resources;
+import com.shc.silenceengine.audio.Sound;
 import com.shc.silenceengine.core.ResourceLoader;
 import com.shc.silenceengine.graphics.Animation;
 import com.shc.silenceengine.graphics.DynamicRenderer;
@@ -30,20 +31,26 @@ public class LoadingState extends ResourceLoadingState
     {
         ResourceLoader loader = new ResourceLoader();
 
+        long logoTexID = loader.define(Texture.class, FilePath.getResourceFile("logo.png"));
         long snakeCellTexID = loader.define(Texture.class, FilePath.getResourceFile("snake_cell.png"));
         long snakeHeadTexID = loader.define(Texture.class, FilePath.getResourceFile("snake_head.png"));
         long snakeFoodTexID = loader.define(Texture.class, FilePath.getResourceFile("snake_food.png"));
         long snakeConnTexID = loader.define(Texture.class, FilePath.getResourceFile("snake_connector.png"));
         long backgroundTexID = loader.define(Texture.class, FilePath.getResourceFile("background.png"));
+        long musicSndID = loader.define(Sound.class, FilePath.getResourceFile("song.ogg"));
 
         long fontID = loader.define(BitmapFont.class, FilePath.getResourceFile("engine_resources/fonts/roboto32px.fnt"));
 
         return new LoadingState(loader, () ->
         {
+            Resources.Textures.LOGO = loader.get(logoTexID);
             Resources.Textures.SNAKE_CELL = loader.get(snakeCellTexID);
             Resources.Textures.SNAKE_FOOD = loader.get(snakeFoodTexID);
             Resources.Textures.SNAKE_CONN = loader.get(snakeConnTexID);
             Resources.Textures.BACKGROUND = loader.get(backgroundTexID);
+
+            Resources.Sounds.MUSIC = loader.get(musicSndID);
+            Resources.Sounds.MUSIC.play(true);
 
             SpriteSheet snakeHeadSheet = new SpriteSheet(loader.get(snakeHeadTexID), 140, 64);
 
@@ -60,7 +67,7 @@ public class LoadingState extends ResourceLoadingState
             Resources.Renderers.DYNAMIC = new DynamicRenderer();
 
             loadDynamicProgram(() -> loadSpriteRenderer(() -> loadBitmapFontRenderer(() ->
-                    LDSnake.INSTANCE.setGameState(new PlayState())
+                    LDSnake.INSTANCE.setGameState(new LogoState())
             )));
         });
     }

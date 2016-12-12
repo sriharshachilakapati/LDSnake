@@ -1,8 +1,9 @@
 package com.shc.ldsnake.entities;
 
+import com.shc.ldsnake.LDSnake;
 import com.shc.ldsnake.Resources;
+import com.shc.ldsnake.states.LogoState;
 import com.shc.ldsnake.states.PlayState;
-import com.shc.silenceengine.core.SilenceEngine;
 import com.shc.silenceengine.graphics.Sprite;
 import com.shc.silenceengine.graphics.SpriteBatch;
 import com.shc.silenceengine.input.Keyboard;
@@ -22,6 +23,8 @@ import static com.shc.silenceengine.input.Keyboard.*;
  */
 public class SnakeCell extends Entity2D
 {
+    private static SnakeCell head;
+
     private Vector2 velocity;
 
     private SnakeCell prevCell;
@@ -39,6 +42,7 @@ public class SnakeCell extends Entity2D
     public SnakeCell(float x, float y, SpriteBatch batch)
     {
         this();
+        head = this;
 
         position.set(x, y);
         scale.set(0.5f);
@@ -104,27 +108,29 @@ public class SnakeCell extends Entity2D
     {
         if (Keyboard.isKeyDown(KEY_W))
         {
-            velocity.set(0, -4);
+            velocity.set(0, -1);
             targetRotation = 270;
         }
 
         if (Keyboard.isKeyDown(KEY_S))
         {
-            velocity.set(0, 4);
+            velocity.set(0, 1);
             targetRotation = 90;
         }
 
         if (Keyboard.isKeyDown(KEY_A))
         {
-            velocity.set(-4, 0);
+            velocity.set(-1, 0);
             targetRotation = 180;
         }
 
         if (Keyboard.isKeyDown(KEY_D))
         {
-            velocity.set(4, 0);
+            velocity.set(1, 0);
             targetRotation = 0;
         }
+
+        velocity.normalize().scale(MathUtils.clamp(getLength(), 4, 12));
 
         rotateTo(targetRotation);
     }
@@ -161,21 +167,20 @@ public class SnakeCell extends Entity2D
 
         final float sign = Math.abs(clampedCurrent - clampedTarget) < 180 ? 1 : -1;
 
-        final float speed = Math.min(5, Math.abs(clampedTarget - clampedCurrent));
+        final float speed = MathUtils.clamp(getLength(), 5, 12);
+        final float clampedSpeed = Math.min(speed, Math.abs(clampedTarget - clampedCurrent));
 
         if (clampedCurrent < clampedTarget)
-            rotation += speed * sign;
+            rotation += clampedSpeed * sign;
         else
-            rotation -= speed * sign;
+            rotation -= clampedSpeed * sign;
     }
 
     private void headTailCollision(Entity2D self, CollisionComponent2D otherComponent)
     {
         if (otherComponent.entity != nextCell && otherComponent.entity instanceof SnakeCell)
-        {
-            SilenceEngine.log.getRootLogger().info("Collision!!");
-            // TODO: Implement head tail collision detection to move to game over state
-        }
+            LDSnake.INSTANCE.setGameState(new LogoState());
+
         else if (otherComponent.entity instanceof SnakeFood)
         {
             PlayState.DEAD.add(otherComponent.entity);
@@ -188,5 +193,17 @@ public class SnakeCell extends Entity2D
             SnakeCell newCell = new SnakeCell(last, PlayState.batch);
             PlayState.NEW.add(newCell);
         }
+    }
+
+    public static int getLength()
+    {
+        int count = 0;
+
+        SnakeCell cell = head;
+
+        while ((cell = cell.nextCell) != null)
+            count++;
+
+        return count;
     }
 }
