@@ -1,6 +1,7 @@
 package com.shc.ldsnake;
 
 import com.shc.silenceengine.collision.CollisionTag;
+import com.shc.silenceengine.graphics.Animation;
 import com.shc.silenceengine.graphics.DynamicRenderer;
 import com.shc.silenceengine.graphics.SpriteRenderer;
 import com.shc.silenceengine.graphics.fonts.BitmapFont;
@@ -17,9 +18,13 @@ public final class Resources
     {
         public static Texture SNAKE_FOOD;
         public static Texture SNAKE_CELL;
-        public static Texture SNAKE_HEAD;
         public static Texture SNAKE_CONN;
         public static Texture BACKGROUND;
+    }
+
+    public static final class Animations
+    {
+        public static Animation SNAKE_HEAD;
     }
 
     public static final class Programs

@@ -45,7 +45,11 @@ public class SnakeCell extends Entity2D
 
         updateHandler = this::updateHead;
 
-        addComponent(new SpriteComponent(new Sprite(Resources.Textures.SNAKE_HEAD), batch));
+        SpriteComponent spriteComponent = new SpriteComponent(new Sprite(Resources.Animations.SNAKE_HEAD), batch);
+        spriteComponent.sprite.setEndCallback(spriteComponent.sprite::start);
+        spriteComponent.sprite.start();
+
+        addComponent(spriteComponent);
 
         Polygon polygon = new Rectangle(124, 64).createPolygon();
         addComponent(new CollisionComponent2D(Resources.CollisionTags.SNAKE_HEAD, polygon, this::headTailCollision));
@@ -85,7 +89,7 @@ public class SnakeCell extends Entity2D
         addChild(connector1);
         addChild(connector2);
 
-        Polygon polygon = new Rectangle(64, 64).createPolygon();
+        Polygon polygon = new Rectangle(63, 43).createPolygon();
         addComponent(new CollisionComponent2D(Resources.CollisionTags.SNAKE_CELL, polygon));
     }
 

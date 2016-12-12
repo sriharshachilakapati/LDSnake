@@ -3,14 +3,17 @@ package com.shc.ldsnake.states;
 import com.shc.ldsnake.LDSnake;
 import com.shc.ldsnake.Resources;
 import com.shc.silenceengine.core.ResourceLoader;
+import com.shc.silenceengine.graphics.Animation;
 import com.shc.silenceengine.graphics.DynamicRenderer;
 import com.shc.silenceengine.graphics.SpriteRenderer;
+import com.shc.silenceengine.graphics.SpriteSheet;
 import com.shc.silenceengine.graphics.fonts.BitmapFont;
 import com.shc.silenceengine.graphics.fonts.BitmapFontRenderer;
 import com.shc.silenceengine.graphics.opengl.Texture;
 import com.shc.silenceengine.graphics.programs.DynamicProgram;
 import com.shc.silenceengine.io.FilePath;
 import com.shc.silenceengine.utils.ResourceLoadingState;
+import com.shc.silenceengine.utils.TimeUtils;
 import com.shc.silenceengine.utils.functional.SimpleCallback;
 
 /**
@@ -38,10 +41,19 @@ public class LoadingState extends ResourceLoadingState
         return new LoadingState(loader, () ->
         {
             Resources.Textures.SNAKE_CELL = loader.get(snakeCellTexID);
-            Resources.Textures.SNAKE_HEAD = loader.get(snakeHeadTexID);
             Resources.Textures.SNAKE_FOOD = loader.get(snakeFoodTexID);
             Resources.Textures.SNAKE_CONN = loader.get(snakeConnTexID);
             Resources.Textures.BACKGROUND = loader.get(backgroundTexID);
+
+            SpriteSheet snakeHeadSheet = new SpriteSheet(loader.get(snakeHeadTexID), 140, 64);
+
+            Animation snakeHeadAnim = Resources.Animations.SNAKE_HEAD = new Animation();
+            snakeHeadAnim.addFrame(snakeHeadSheet.getCell(0, 0), 100, TimeUtils.Unit.MILLIS);
+            snakeHeadAnim.addFrame(snakeHeadSheet.getCell(1, 0), 250, TimeUtils.Unit.MILLIS);
+            snakeHeadAnim.addFrame(snakeHeadSheet.getCell(0, 0), 100, TimeUtils.Unit.MILLIS);
+            snakeHeadAnim.addFrame(snakeHeadSheet.getCell(1, 0), 250, TimeUtils.Unit.MILLIS);
+            snakeHeadAnim.addFrame(snakeHeadSheet.getCell(0, 0), 500, TimeUtils.Unit.MILLIS);
+            snakeHeadAnim.addFrame(snakeHeadSheet.getCell(1, 0), 250, TimeUtils.Unit.MILLIS);
 
             Resources.Fonts.NORMAL = loader.get(fontID);
 
