@@ -7,6 +7,8 @@ import com.shc.silenceengine.core.SilenceEngine;
 import com.shc.silenceengine.graphics.SpriteBatch;
 import com.shc.silenceengine.graphics.cameras.OrthoCam;
 import com.shc.silenceengine.scene.Scene2D;
+import com.shc.silenceengine.utils.GameTimer;
+import com.shc.silenceengine.utils.TimeUtils;
 
 /**
  * @author Sri Harsha Chilakapati
@@ -18,6 +20,8 @@ public class PlayState extends GameState
     private Scene2D     scene;
     private SpriteBatch batch;
 
+    private GameTimer snakeGrowTimer;
+
     @Override
     public void onEnter()
     {
@@ -26,12 +30,18 @@ public class PlayState extends GameState
         scene = new Scene2D();
         batch = new SpriteBatch(Resources.Renderers.SPRITE);
 
-        SnakeCell head;
+        final SnakeCell[] head = new SnakeCell[1];
 
-        scene.entities.add(head = new SnakeCell(100, 100, batch));
+        scene.entities.add(head[0] = new SnakeCell(100, 100, batch));
+        snakeGrowTimer = new GameTimer(5, TimeUtils.Unit.SECONDS);
 
-        for (int i = 0; i < 10; i++)
-            scene.entities.add(head = new SnakeCell(head, batch));
+        snakeGrowTimer.setCallback(() ->
+        {
+            scene.entities.add(head[0] = new SnakeCell(head[0], batch));
+            snakeGrowTimer.start();
+        });
+
+        snakeGrowTimer.start();
     }
 
     @Override
@@ -52,5 +62,11 @@ public class PlayState extends GameState
     public void resized()
     {
         camera.initProjection(SilenceEngine.display.getWidth(), SilenceEngine.display.getHeight());
+    }
+
+    @Override
+    public void onLeave()
+    {
+        snakeGrowTimer.stop();
     }
 }

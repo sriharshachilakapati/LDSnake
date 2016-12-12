@@ -51,26 +51,6 @@ public class SnakeCell extends Entity2D
         scale.set(0.5f);
         position.set(parent.position);
 
-        switch (parent.direction)
-        {
-            case NONE:
-            case RIGHT:
-                position.add(-32, 0);
-                break;
-
-            case LEFT:
-                position.add(32, 0);
-                break;
-
-            case UP:
-                position.add(0, 32);
-                break;
-
-            case DOWN:
-                position.add(0, -32);
-                break;
-        }
-
         addComponent(new SpriteComponent(new Sprite(Resources.Textures.SNAKE_CELL), batch));
     }
 
