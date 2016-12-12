@@ -4,6 +4,7 @@ import com.shc.ldsnake.LDSnake;
 import com.shc.ldsnake.Resources;
 import com.shc.ldsnake.states.LogoState;
 import com.shc.ldsnake.states.PlayState;
+import com.shc.silenceengine.core.SilenceEngine;
 import com.shc.silenceengine.graphics.Sprite;
 import com.shc.silenceengine.graphics.SpriteBatch;
 import com.shc.silenceengine.input.Keyboard;
@@ -97,6 +98,18 @@ public class SnakeCell extends Entity2D
         addComponent(new CollisionComponent2D(Resources.CollisionTags.SNAKE_CELL, polygon));
     }
 
+    public static int getLength()
+    {
+        int count = 0;
+
+        SnakeCell cell = head;
+
+        while ((cell = cell.nextCell) != null)
+            count++;
+
+        return count;
+    }
+
     @Override
     protected void onUpdate(float deltaTime)
     {
@@ -131,8 +144,14 @@ public class SnakeCell extends Entity2D
         }
 
         velocity.normalize().scale(MathUtils.clamp(getLength(), 4, 12));
-
         rotateTo(targetRotation);
+
+        if (position.x > SilenceEngine.display.getWidth() || position.x < 0 ||
+            position.y > SilenceEngine.display.getHeight() || position.y < 0)
+        {
+            LDSnake.INSTANCE.setGameState(new LogoState());
+        }
+
     }
 
     private void updateTail(float deltaTime)
@@ -193,17 +212,5 @@ public class SnakeCell extends Entity2D
             SnakeCell newCell = new SnakeCell(last, PlayState.batch);
             PlayState.NEW.add(newCell);
         }
-    }
-
-    public static int getLength()
-    {
-        int count = 0;
-
-        SnakeCell cell = head;
-
-        while ((cell = cell.nextCell) != null)
-            count++;
-
-        return count;
     }
 }
