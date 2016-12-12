@@ -4,6 +4,8 @@ import com.shc.ldsnake.LDSnake;
 import com.shc.ldsnake.Resources;
 import com.shc.silenceengine.core.ResourceLoader;
 import com.shc.silenceengine.graphics.SpriteRenderer;
+import com.shc.silenceengine.graphics.fonts.BitmapFont;
+import com.shc.silenceengine.graphics.fonts.BitmapFontRenderer;
 import com.shc.silenceengine.graphics.opengl.Texture;
 import com.shc.silenceengine.io.FilePath;
 import com.shc.silenceengine.utils.ResourceLoadingState;
@@ -24,14 +26,22 @@ public class LoadingState extends ResourceLoadingState
         ResourceLoader loader = new ResourceLoader();
 
         long snakeCellTexID = loader.define(Texture.class, FilePath.getResourceFile("snake_cell.png"));
+        long fontID = loader.define(BitmapFont.class, FilePath.getResourceFile("engine_resources/fonts/roboto32px.fnt"));
 
         return new LoadingState(loader, () ->
         {
             Resources.Textures.SNAKE_CELL = loader.get(snakeCellTexID);
+            Resources.Fonts.NORMAL = loader.get(fontID);
 
-            SpriteRenderer.create(spriteRenderer -> {
+            SpriteRenderer.create(spriteRenderer ->
+            {
                 Resources.Renderers.SPRITE = spriteRenderer;
-                LDSnake.INSTANCE.setGameState(new PlayState());
+
+                BitmapFontRenderer.create(bitmapFontRenderer ->
+                {
+                    Resources.Renderers.BITMAP_FONT = bitmapFontRenderer;
+                    LDSnake.INSTANCE.setGameState(new PlayState());
+                });
             });
         });
     }

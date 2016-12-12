@@ -6,6 +6,7 @@ import com.shc.silenceengine.core.GameState;
 import com.shc.silenceengine.core.SilenceEngine;
 import com.shc.silenceengine.graphics.SpriteBatch;
 import com.shc.silenceengine.graphics.cameras.OrthoCam;
+import com.shc.silenceengine.graphics.fonts.BitmapFontRenderer;
 import com.shc.silenceengine.scene.Scene2D;
 import com.shc.silenceengine.utils.GameTimer;
 import com.shc.silenceengine.utils.TimeUtils;
@@ -56,6 +57,14 @@ public class PlayState extends GameState
         batch.begin();
         scene.render(delta);
         batch.end();
+
+        BitmapFontRenderer fontRenderer = Resources.Renderers.BITMAP_FONT;
+        fontRenderer.begin();
+        {
+            fontRenderer.render(Resources.Fonts.NORMAL, "FPS: " + SilenceEngine.gameLoop.getFPS(), 10, 10);
+            fontRenderer.render(Resources.Fonts.NORMAL, "\nUPS: " + SilenceEngine.gameLoop.getUPS(), 10, 10);
+        }
+        fontRenderer.end();
     }
 
     @Override
