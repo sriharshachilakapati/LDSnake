@@ -119,25 +119,25 @@ public class SnakeCell extends Entity2D
 
     private void updateHead(float deltaTime)
     {
-        if (Keyboard.isKeyDown(KEY_W))
+        if (Keyboard.isKeyDown(KEY_W) || Keyboard.isKeyDown(KEY_UP))
         {
             velocity.set(0, -1);
             targetRotation = 270;
         }
 
-        if (Keyboard.isKeyDown(KEY_S))
+        if (Keyboard.isKeyDown(KEY_S) || Keyboard.isKeyDown(KEY_DOWN))
         {
             velocity.set(0, 1);
             targetRotation = 90;
         }
 
-        if (Keyboard.isKeyDown(KEY_A))
+        if (Keyboard.isKeyDown(KEY_A) || Keyboard.isKeyDown(KEY_LEFT))
         {
             velocity.set(-1, 0);
             targetRotation = 180;
         }
 
-        if (Keyboard.isKeyDown(KEY_D))
+        if (Keyboard.isKeyDown(KEY_D) || Keyboard.isKeyDown(KEY_RIGHT))
         {
             velocity.set(1, 0);
             targetRotation = 0;
@@ -151,7 +151,6 @@ public class SnakeCell extends Entity2D
         {
             LDSnake.INSTANCE.setGameState(new LogoState());
         }
-
     }
 
     private void updateTail(float deltaTime)
