@@ -1,10 +1,14 @@
 package com.shc.ldsnake.entities;
 
 import com.shc.ldsnake.Resources;
+import com.shc.silenceengine.core.SilenceEngine;
 import com.shc.silenceengine.graphics.Sprite;
 import com.shc.silenceengine.graphics.SpriteBatch;
 import com.shc.silenceengine.input.Keyboard;
 import com.shc.silenceengine.math.Vector2;
+import com.shc.silenceengine.math.geom2d.Polygon;
+import com.shc.silenceengine.math.geom2d.Rectangle;
+import com.shc.silenceengine.scene.components.CollisionComponent2D;
 import com.shc.silenceengine.scene.components.SpriteComponent;
 import com.shc.silenceengine.scene.entity.Entity2D;
 import com.shc.silenceengine.utils.MathUtils;
@@ -41,6 +45,9 @@ public class SnakeCell extends Entity2D
         updateHandler = this::updateHead;
 
         addComponent(new SpriteComponent(new Sprite(Resources.Textures.SNAKE_HEAD), batch));
+
+        Polygon polygon = new Rectangle(124, 64).createPolygon();
+        addComponent(new CollisionComponent2D(Resources.CollisionTags.SNAKE_HEAD, polygon, this::headTailCollision));
     }
 
     public SnakeCell(SnakeCell prevCell, SpriteBatch batch)
@@ -73,6 +80,9 @@ public class SnakeCell extends Entity2D
 
         addChild(connector1);
         addChild(connector2);
+
+        Polygon polygon = new Rectangle(64, 64).createPolygon();
+        addComponent(new CollisionComponent2D(Resources.CollisionTags.SNAKE_CELL, polygon));
     }
 
     @Override
@@ -113,6 +123,9 @@ public class SnakeCell extends Entity2D
 
     private void updateTail(float deltaTime)
     {
+        if (prevCell.position.x == position.x && prevCell.position.y == position.y)
+            return;
+
         velocity.set(prevCell.position).subtract(position);
 
         float distToBehind = velocity.length();
@@ -146,5 +159,11 @@ public class SnakeCell extends Entity2D
             rotation += speed * sign;
         else
             rotation -= speed * sign;
+    }
+
+    private void headTailCollision(Entity2D self, CollisionComponent2D otherComponent)
+    {
+        if (otherComponent.entity != nextCell)
+            SilenceEngine.log.getRootLogger().info("Collision!!");
     }
 }

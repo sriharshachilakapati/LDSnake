@@ -2,6 +2,8 @@ package com.shc.ldsnake.states;
 
 import com.shc.ldsnake.Resources;
 import com.shc.ldsnake.entities.SnakeCell;
+import com.shc.silenceengine.collision.broadphase.DynamicTree2D;
+import com.shc.silenceengine.collision.colliders.SceneCollider2D;
 import com.shc.silenceengine.core.GameState;
 import com.shc.silenceengine.core.SilenceEngine;
 import com.shc.silenceengine.graphics.DynamicRenderer;
@@ -24,6 +26,8 @@ public class PlayState extends GameState
     private Scene2D     scene;
     private SpriteBatch batch;
 
+    private SceneCollider2D collider;
+
     private GameTimer snakeGrowTimer;
 
     @Override
@@ -32,18 +36,17 @@ public class PlayState extends GameState
         camera = new OrthoCam(SilenceEngine.display.getWidth(), SilenceEngine.display.getHeight());
 
         scene = new Scene2D();
+
+        collider = new SceneCollider2D(new DynamicTree2D());
+        collider.register(Resources.CollisionTags.SNAKE_HEAD, Resources.CollisionTags.SNAKE_CELL);
+        collider.setScene(scene);
+
         batch = new SpriteBatch(Resources.Renderers.SPRITE);
 
         final SnakeCell[] head = new SnakeCell[1];
 
         scene.entities.add(head[0] = new SnakeCell(100, 100, batch));
         head[0].update(0);
-
-        for (int i = 0; i < 15; i++)
-        {
-            scene.entities.add(head[0] = new SnakeCell(head[0], batch));
-            head[0].update(0);
-        }
 
         snakeGrowTimer = new GameTimer(5, TimeUtils.Unit.SECONDS);
 
@@ -61,6 +64,7 @@ public class PlayState extends GameState
     public void update(float delta)
     {
         scene.update(delta);
+        collider.checkCollisions();
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.shc.ldsnake;
 
+import com.shc.silenceengine.collision.CollisionTag;
 import com.shc.silenceengine.graphics.DynamicRenderer;
 import com.shc.silenceengine.graphics.SpriteRenderer;
 import com.shc.silenceengine.graphics.fonts.BitmapFont;
@@ -28,6 +29,12 @@ public final class Resources
     public static final class Fonts
     {
         public static BitmapFont NORMAL;
+    }
+
+    public static final class CollisionTags
+    {
+        public static final CollisionTag SNAKE_CELL = new CollisionTag();
+        public static final CollisionTag SNAKE_HEAD = new CollisionTag();
     }
 
     public static final class Renderers
