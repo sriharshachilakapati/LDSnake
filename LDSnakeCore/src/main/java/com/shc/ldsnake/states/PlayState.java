@@ -26,7 +26,12 @@ public class PlayState extends GameState
         scene = new Scene2D();
         batch = new SpriteBatch(Resources.Renderers.SPRITE);
 
-        scene.entities.add(new SnakeCell(100, 100, batch));
+        SnakeCell head;
+
+        scene.entities.add(head = new SnakeCell(100, 100, batch));
+
+        for (int i = 0; i < 10; i++)
+            scene.entities.add(head = new SnakeCell(head, batch));
     }
 
     @Override
