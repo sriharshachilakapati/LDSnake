@@ -29,6 +29,7 @@ public class LoadingState extends ResourceLoadingState
 
         long snakeCellTexID = loader.define(Texture.class, FilePath.getResourceFile("snake_cell.png"));
         long snakeHeadTexID = loader.define(Texture.class, FilePath.getResourceFile("snake_head.png"));
+        long snakeFoodTexID = loader.define(Texture.class, FilePath.getResourceFile("snake_food.png"));
         long snakeConnTexID = loader.define(Texture.class, FilePath.getResourceFile("snake_connector.png"));
         long backgroundTexID = loader.define(Texture.class, FilePath.getResourceFile("background.png"));
 
@@ -38,6 +39,7 @@ public class LoadingState extends ResourceLoadingState
         {
             Resources.Textures.SNAKE_CELL = loader.get(snakeCellTexID);
             Resources.Textures.SNAKE_HEAD = loader.get(snakeHeadTexID);
+            Resources.Textures.SNAKE_FOOD = loader.get(snakeFoodTexID);
             Resources.Textures.SNAKE_CONN = loader.get(snakeConnTexID);
             Resources.Textures.BACKGROUND = loader.get(backgroundTexID);
 

@@ -1,6 +1,7 @@
 package com.shc.ldsnake.entities;
 
 import com.shc.ldsnake.Resources;
+import com.shc.ldsnake.states.PlayState;
 import com.shc.silenceengine.core.SilenceEngine;
 import com.shc.silenceengine.graphics.Sprite;
 import com.shc.silenceengine.graphics.SpriteBatch;
@@ -163,7 +164,22 @@ public class SnakeCell extends Entity2D
 
     private void headTailCollision(Entity2D self, CollisionComponent2D otherComponent)
     {
-        if (otherComponent.entity != nextCell)
+        if (otherComponent.entity != nextCell && otherComponent.entity instanceof SnakeCell)
+        {
             SilenceEngine.log.getRootLogger().info("Collision!!");
+            // TODO: Implement head tail collision detection to move to game over state
+        }
+        else if (otherComponent.entity instanceof SnakeFood)
+        {
+            PlayState.DEAD.add(otherComponent.entity);
+
+            SnakeCell last = this;
+
+            while (last.nextCell != null)
+                last = last.nextCell;
+
+            SnakeCell newCell = new SnakeCell(last, PlayState.batch);
+            PlayState.NEW.add(newCell);
+        }
     }
 }

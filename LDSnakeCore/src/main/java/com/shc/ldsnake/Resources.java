@@ -15,6 +15,7 @@ public final class Resources
 {
     public static final class Textures
     {
+        public static Texture SNAKE_FOOD;
         public static Texture SNAKE_CELL;
         public static Texture SNAKE_HEAD;
         public static Texture SNAKE_CONN;
@@ -35,6 +36,7 @@ public final class Resources
     {
         public static final CollisionTag SNAKE_CELL = new CollisionTag();
         public static final CollisionTag SNAKE_HEAD = new CollisionTag();
+        public static final CollisionTag SNAKE_FOOD = new CollisionTag();
     }
 
     public static final class Renderers

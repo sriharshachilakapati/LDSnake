@@ -2,6 +2,7 @@ package com.shc.ldsnake.states;
 
 import com.shc.ldsnake.Resources;
 import com.shc.ldsnake.entities.SnakeCell;
+import com.shc.ldsnake.entities.SnakeFood;
 import com.shc.silenceengine.collision.broadphase.DynamicTree2D;
 import com.shc.silenceengine.collision.colliders.SceneCollider2D;
 import com.shc.silenceengine.core.GameState;
@@ -13,22 +14,28 @@ import com.shc.silenceengine.graphics.cameras.OrthoCam;
 import com.shc.silenceengine.graphics.fonts.BitmapFontRenderer;
 import com.shc.silenceengine.graphics.opengl.Primitive;
 import com.shc.silenceengine.scene.Scene2D;
+import com.shc.silenceengine.scene.entity.Entity2D;
 import com.shc.silenceengine.utils.GameTimer;
 import com.shc.silenceengine.utils.TimeUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Sri Harsha Chilakapati
  */
 public class PlayState extends GameState
 {
-    private OrthoCam camera;
+    public static final List<Entity2D> DEAD = new ArrayList<>();
+    public static final List<Entity2D> NEW  = new ArrayList<>();
 
-    private Scene2D     scene;
-    private SpriteBatch batch;
+    public static SpriteBatch batch;
+
+    private OrthoCam  camera;
+    private Scene2D   scene;
+    private GameTimer snakeFoodTimer;
 
     private SceneCollider2D collider;
-
-    private GameTimer snakeGrowTimer;
 
     @Override
     public void onEnter()
@@ -39,30 +46,36 @@ public class PlayState extends GameState
 
         collider = new SceneCollider2D(new DynamicTree2D());
         collider.register(Resources.CollisionTags.SNAKE_HEAD, Resources.CollisionTags.SNAKE_CELL);
+        collider.register(Resources.CollisionTags.SNAKE_HEAD, Resources.CollisionTags.SNAKE_FOOD);
         collider.setScene(scene);
 
         batch = new SpriteBatch(Resources.Renderers.SPRITE);
 
-        final SnakeCell[] head = new SnakeCell[1];
+        SnakeCell head = new SnakeCell(100, 100, batch);
+        scene.entities.add(head);
 
-        scene.entities.add(head[0] = new SnakeCell(100, 100, batch));
-        head[0].update(0);
+        snakeFoodTimer = new GameTimer(5, TimeUtils.Unit.SECONDS);
 
-        snakeGrowTimer = new GameTimer(5, TimeUtils.Unit.SECONDS);
-
-        snakeGrowTimer.setCallback(() ->
+        snakeFoodTimer.setCallback(() ->
         {
-            scene.entities.add(head[0] = new SnakeCell(head[0], batch));
-            head[0].update(0);
-            snakeGrowTimer.start();
+            Entity2D entity = new SnakeFood(batch);
+            NEW.add(entity);
+
+            snakeFoodTimer.start();
         });
 
-        snakeGrowTimer.start();
+        snakeFoodTimer.start();
     }
 
     @Override
     public void update(float delta)
     {
+        scene.entities.removeAll(DEAD);
+        scene.entities.addAll(NEW);
+
+        DEAD.clear();
+        NEW.clear();
+
         scene.update(delta);
         collider.checkCollisions();
     }
@@ -115,6 +128,6 @@ public class PlayState extends GameState
     @Override
     public void onLeave()
     {
-        snakeGrowTimer.stop();
+        snakeFoodTimer.stop();
     }
 }
