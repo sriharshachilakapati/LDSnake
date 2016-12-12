@@ -53,6 +53,7 @@ public class PlayState extends GameState
 
         SnakeCell head = new SnakeCell(100, 100, batch);
         scene.entities.add(head);
+        scene.entities.add(new SnakeCell(head, batch));
 
         snakeFoodTimer = new GameTimer(5, TimeUtils.Unit.SECONDS);
 

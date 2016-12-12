@@ -63,18 +63,21 @@ public class SnakeCell extends Entity2D
         scale.set(0.5f);
         position.set(prevCell.position);
 
-        addComponent(new SpriteComponent(new Sprite(Resources.Textures.SNAKE_CELL), batch));
+        SpriteComponent spriteComponent = new SpriteComponent(new Sprite(Resources.Textures.SNAKE_CELL), batch);
+        spriteComponent.layer = 1;
+
+        addComponent(spriteComponent);
 
         Entity2D connector1 = new Entity2D();
         SpriteComponent connectorComponent1 = new SpriteComponent(new Sprite(Resources.Textures.SNAKE_CONN), batch);
-        connectorComponent1.layer = 1;
+        connectorComponent1.layer = 2;
         connector1.addComponent(connectorComponent1);
         connector1.position.set(-32, 0);
         connector1.scale.set(0.5f);
 
         Entity2D connector2 = new Entity2D();
         SpriteComponent connectorComponent2 = new SpriteComponent(new Sprite(Resources.Textures.SNAKE_CONN), batch);
-        connectorComponent2.layer = 1;
+        connectorComponent2.layer = 2;
         connector2.addComponent(connectorComponent2);
         connector2.position.set(32, 0);
         connector2.scale.set(0.5f);
