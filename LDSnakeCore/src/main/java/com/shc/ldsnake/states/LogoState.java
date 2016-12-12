@@ -16,7 +16,7 @@ import com.shc.silenceengine.input.Keyboard;
  */
 public class LogoState extends GameState
 {
-    private OrthoCam  camera;
+    private OrthoCam camera;
 
     @Override
     public void onEnter()

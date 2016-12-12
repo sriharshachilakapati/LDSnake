@@ -28,9 +28,9 @@ public class PlayState extends GameState
     public static final List<Entity2D> DEAD = new ArrayList<>();
     public static final List<Entity2D> NEW  = new ArrayList<>();
 
-    public static float score;
-
     public static SpriteBatch batch;
+
+    static float score;
 
     private OrthoCam  camera;
     private Scene2D   scene;
