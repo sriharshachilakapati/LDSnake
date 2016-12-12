@@ -47,22 +47,38 @@ public class LoadingState extends ResourceLoadingState
 
             Resources.Renderers.DYNAMIC = new DynamicRenderer();
 
-            DynamicProgram.create(dynamicProgram ->
-            {
-                Resources.Programs.DYNAMIC = dynamicProgram;
-                dynamicProgram.applyToRenderer(Resources.Renderers.DYNAMIC);
+            loadDynamicProgram(() -> loadSpriteRenderer(() -> loadBitmapFontRenderer(() ->
+                    LDSnake.INSTANCE.setGameState(new PlayState())
+            )));
+        });
+    }
 
-                SpriteRenderer.create(spriteRenderer ->
-                {
-                    Resources.Renderers.SPRITE = spriteRenderer;
+    private static void loadDynamicProgram(SimpleCallback next)
+    {
+        DynamicProgram.create(dynamicProgram ->
+        {
+            Resources.Programs.DYNAMIC = dynamicProgram;
+            dynamicProgram.applyToRenderer(Resources.Renderers.DYNAMIC);
 
-                    BitmapFontRenderer.create(bitmapFontRenderer ->
-                    {
-                        Resources.Renderers.BITMAP_FONT = bitmapFontRenderer;
-                        LDSnake.INSTANCE.setGameState(new PlayState());
-                    });
-                });
-            });
+            next.invoke();
+        });
+    }
+
+    private static void loadSpriteRenderer(SimpleCallback next)
+    {
+        SpriteRenderer.create(spriteRenderer ->
+        {
+            Resources.Renderers.SPRITE = spriteRenderer;
+            next.invoke();
+        });
+    }
+
+    private static void loadBitmapFontRenderer(SimpleCallback next)
+    {
+        BitmapFontRenderer.create(bitmapFontRenderer ->
+        {
+            Resources.Renderers.BITMAP_FONT = bitmapFontRenderer;
+            next.invoke();
         });
     }
 }
